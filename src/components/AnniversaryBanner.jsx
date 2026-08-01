@@ -19,9 +19,12 @@ export const AnniversaryBanner = ({
       return;
     }
 
-    // Check if any upcoming event lands on today
+    // Check if any upcoming event lands on today (recurring events are checked
+    // by month/day match so they fire every year, not just their original date)
     const nowStr = new Date().toISOString().slice(0, 10);
-    const matched = upcomingEvents.find((e) => e.targetDate.startsWith(nowStr));
+    const matched = upcomingEvents.find((e) =>
+      e.recurring ? isTodayAnniversary(e.targetDate) : e.targetDate.startsWith(nowStr)
+    );
     if (matched) {
       setTodayEvent(`اليوم نحتفل بـ: ${matched.title} 🎉`);
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.2 } });

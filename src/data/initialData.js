@@ -36,6 +36,7 @@ export const initialAppData = {
       targetDate: '2022-07-11',
       description: 'نستعد للرجل الأجمل والاحتفال بمرور سنين من السعادة والحب المتجدد.',
       iconName: 'heart',
+      recurring: true,
     },
     {
       id: 'e2',
@@ -43,6 +44,7 @@ export const initialAppData = {
       targetDate: '2001-03-12T10:00',
       description: 'أجمل يوم في السنة لأن العالم أشرق فيه بوجودك.',
       iconName: 'cake',
+      recurring: true,
     },
     {
       id: 'e3',
@@ -50,6 +52,7 @@ export const initialAppData = {
       targetDate: '2025-06-07T10:00',
       description: 'صنع ذكريات جديدة في مكان ساحر نكتشفه سوياً.',
       iconName: 'heart',
+      recurring: true,
     }
   ],
   secretNotes: [

@@ -17,7 +17,6 @@ import { Heart, Gift } from 'lucide-react';
 
 export default function App() {
   const [appData, setAppData] = useState(() => loadAppData());
-  const [activeTab, setActiveTab] = useState('memories');
   const [selectedMemory, setSelectedMemory] = useState(null);
   const [isShareOpen, setIsShareOpen] = useState(false);
 
@@ -37,12 +36,22 @@ export default function App() {
   const handleUnlockSite = () => {
     setIsSiteLocked(false);
     sessionStorage.setItem('love_story_site_unlocked', 'true');
+    // Start the background song right away — this fires from the user's
+    // "unlock" click, so browsers will allow the audio/video to play.
+    setIsPlayingMusic(true);
   };
 
   const partnerNames = `${appData.profile.partnerOne} & ${appData.profile.partnerTwo}`;
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-100/60 via-rose-50/40 to-pink-100/50 text-gray-800 flex flex-col relative font-sans selection:bg-rose-500 selection:text-white">
+    <div id="top" className="min-h-screen bg-gradient-to-b from-rose-100/60 via-rose-50/40 to-pink-100/50 text-gray-800 flex flex-col relative font-sans selection:bg-rose-500 selection:text-white">
       {/* Site Entry Lock Modal (Requires Password 1232001) */}
       <PasswordLockModal
         isLocked={isSiteLocked}
@@ -64,8 +73,6 @@ export default function App() {
 
       {/* Navigation Header */}
       <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
         onOpenShare={() => setIsShareOpen(true)}
         isPlayingMusic={isPlayingMusic}
         onToggleMusic={() => setIsPlayingMusic((prev) => !prev)}
@@ -82,34 +89,30 @@ export default function App() {
       {/* Hero Header Section */}
       <HeroSection
         profile={appData.profile}
-        onExploreMemories={() => setActiveTab('memories')}
-        onOpenDaily={() => setActiveTab('daily')}
+        onExploreMemories={() => scrollToSection('memories')}
+        onOpenDaily={() => scrollToSection('daily')}
       />
 
-      {/* Main View Area */}
+      {/* Main View Area - everything visible on one home page, scroll to browse */}
       <main className="flex-1 pb-24 relative z-10">
-        {activeTab === 'memories' && (
+        <div id="memories" className="scroll-mt-20">
           <TimelineSection
             memories={appData.memories}
             onSelectMemory={(mem) => setSelectedMemory(mem)}
           />
-        )}
+        </div>
 
-        {activeTab === 'countdowns' && (
-          <CountdownSection
-            events={appData.upcomingEvents}
-          />
-        )}
+        <div id="countdowns" className="scroll-mt-20">
+          <CountdownSection events={appData.upcomingEvents} />
+        </div>
 
-        {activeTab === 'notes' && (
-          <SecretNotesSection
-            notes={appData.secretNotes}
-          />
-        )}
+        <div id="notes" className="scroll-mt-20">
+          <SecretNotesSection notes={appData.secretNotes} />
+        </div>
 
-        {activeTab === 'daily' && (
+        <div id="daily" className="scroll-mt-20">
           <DailyBoxSection messages={appData.dailyMessages} />
-        )}
+        </div>
       </main>
 
       {/* Floating Background Audio Player */}

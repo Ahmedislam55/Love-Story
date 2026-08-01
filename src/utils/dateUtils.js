@@ -69,6 +69,35 @@ export function formatArabicDate(dateStr) {
   }
 }
 
+// Given an original date (birthday / anniversary / engagement date), returns the
+// next upcoming occurrence of that same month & day (and time, if provided).
+// If today IS the day of the event, it stays on today's date (so the "celebration"
+// state shows for the whole day) instead of jumping straight to next year.
+export function getNextOccurrence(dateStr) {
+  const original = new Date(dateStr);
+  const now = new Date();
+
+  const hours = original.getHours() || 0;
+  const minutes = original.getMinutes() || 0;
+
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let candidate = new Date(now.getFullYear(), original.getMonth(), original.getDate(), hours, minutes, 0);
+  const candidateDayStart = new Date(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
+
+  if (candidateDayStart.getTime() < todayStart.getTime()) {
+    candidate = new Date(now.getFullYear() + 1, original.getMonth(), original.getDate(), hours, minutes, 0);
+  }
+
+  return candidate;
+}
+
+// Returns which occurrence this upcoming date is (age turning, or anniversary number)
+export function getOccurrenceNumber(dateStr) {
+  const original = new Date(dateStr);
+  const next = getNextOccurrence(dateStr);
+  return next.getFullYear() - original.getFullYear();
+}
+
 export function isTodayAnniversary(startDateStr) {
   if (!startDateStr) return false;
   const start = new Date(startDateStr);

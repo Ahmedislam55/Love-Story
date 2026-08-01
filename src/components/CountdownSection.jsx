@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Heart, Sparkles, Cake, Plane, Gift } from 'lucide-react';
-import { calculateTimeRemaining, formatArabicDate } from '../utils/dateUtils.js';
+import { calculateTimeRemaining, formatArabicDate, getNextOccurrence, getOccurrenceNumber } from '../utils/dateUtils.js';
 import confetti from 'canvas-confetti';
 
 const CountdownCard = ({ event }) => {
-  const [time, setTime] = useState(() => calculateTimeRemaining(event.targetDate));
+  // Recurring events (birthday / anniversary / engagement day) always count down
+  // to their NEXT yearly occurrence instead of freezing on the original past date.
+  const effectiveDate = event.recurring ? getNextOccurrence(event.targetDate) : new Date(event.targetDate);
+  const occurrenceNumber = event.recurring ? getOccurrenceNumber(event.targetDate) : null;
+
+  const [time, setTime] = useState(() => calculateTimeRemaining(effectiveDate));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const remaining = calculateTimeRemaining(event.targetDate);
+      const currentEffectiveDate = event.recurring ? getNextOccurrence(event.targetDate) : new Date(event.targetDate);
+      const remaining = calculateTimeRemaining(currentEffectiveDate);
       setTime(remaining);
       if (remaining.isPast && remaining.days === 0 && remaining.hours === 0 && remaining.minutes === 0) {
         // Trigger celebratory confetti on event arrival
@@ -16,7 +22,14 @@ const CountdownCard = ({ event }) => {
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [event.targetDate]);
+  }, [event.targetDate, event.recurring]);
+
+  const occurrenceLabel =
+    occurrenceNumber && occurrenceNumber > 0
+      ? event.iconName === 'cake'
+        ? `🎂 هتكملي ${occurrenceNumber} سنة`
+        : `❤️ الذكرى الـ ${occurrenceNumber}`
+      : null;
 
   const renderIcon = (iconName) => {
     switch (iconName) {
@@ -47,11 +60,16 @@ const CountdownCard = ({ event }) => {
           {event.description && (
             <p className="text-xs text-gray-600 line-clamp-2 pt-1">{event.description}</p>
           )}
+          {occurrenceLabel && (
+            <span className="inline-block text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+              {occurrenceLabel}
+            </span>
+          )}
         </div>
 
         <div className="text-xs font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full whitespace-nowrap border border-rose-100">
           <Calendar className="w-3.5 h-3.5 inline ml-1" />
-          {formatArabicDate(event.targetDate.slice(0, 10))}
+          {formatArabicDate(effectiveDate)}
         </div>
       </div>
 

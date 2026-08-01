@@ -1,9 +1,14 @@
 import React from 'react';
 import { Heart, Calendar, Lock, Gift, Music, Share2, Sparkles } from 'lucide-react';
 
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 export const Navbar = ({
-  activeTab,
-  setActiveTab,
   onOpenShare,
   isPlayingMusic,
   onToggleMusic,
@@ -13,8 +18,8 @@ export const Navbar = ({
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-rose-100 shadow-xs dir-rtl">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Brand logo & couple names */}
-        <div 
-          onClick={() => setActiveTab('memories')}
+        <div
+          onClick={() => scrollToSection('top')}
           className="flex items-center gap-2.5 cursor-pointer group select-none"
         >
           <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 p-0.5 shadow-md group-hover:scale-105 transition-transform">
@@ -31,51 +36,35 @@ export const Navbar = ({
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links - jump to section on the same page */}
         <nav className="hidden md:flex items-center gap-1 bg-rose-50/80 p-1.5 rounded-full border border-rose-100">
           <button
-            onClick={() => setActiveTab('memories')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              activeTab === 'memories'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'text-rose-700 hover:bg-rose-100/60'
-            }`}
+            onClick={() => scrollToSection('memories')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-rose-700 hover:bg-rose-100/60 transition-all"
           >
             <Heart className="w-4 h-4" />
             <span>ذكرياتنا</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('countdowns')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              activeTab === 'countdowns'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'text-rose-700 hover:bg-rose-100/60'
-            }`}
+            onClick={() => scrollToSection('countdowns')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-rose-700 hover:bg-rose-100/60 transition-all"
           >
             <Calendar className="w-4 h-4" />
             <span>عد تنازلي</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('notes')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              activeTab === 'notes'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'text-rose-700 hover:bg-rose-100/60'
-            }`}
+            onClick={() => scrollToSection('notes')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-rose-700 hover:bg-rose-100/60 transition-all"
           >
             <Lock className="w-4 h-4" />
             <span>رسائل مخفية</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('daily')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              activeTab === 'daily'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'text-rose-700 hover:bg-rose-100/60'
-            }`}
+            onClick={() => scrollToSection('daily')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-rose-700 hover:bg-rose-100/60 transition-all"
           >
             <Gift className="w-4 h-4" />
             <span>صندوق اليوم</span>
@@ -108,43 +97,35 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Mobile Bottom Navigation Bar - jump to section on the same page */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-rose-200 px-3 py-2 flex items-center justify-around shadow-lg dir-rtl">
         <button
-          onClick={() => setActiveTab('memories')}
-          className={`flex flex-col items-center gap-0.5 text-xs font-medium ${
-            activeTab === 'memories' ? 'text-rose-600 font-bold' : 'text-gray-500'
-          }`}
+          onClick={() => scrollToSection('memories')}
+          className="flex flex-col items-center gap-0.5 text-xs font-medium text-gray-500"
         >
-          <Heart className={`w-5 h-5 ${activeTab === 'memories' ? 'fill-rose-600' : ''}`} />
+          <Heart className="w-5 h-5" />
           <span>الذكريات</span>
         </button>
 
         <button
-          onClick={() => setActiveTab('countdowns')}
-          className={`flex flex-col items-center gap-0.5 text-xs font-medium ${
-            activeTab === 'countdowns' ? 'text-rose-600 font-bold' : 'text-gray-500'
-          }`}
+          onClick={() => scrollToSection('countdowns')}
+          className="flex flex-col items-center gap-0.5 text-xs font-medium text-gray-500"
         >
           <Calendar className="w-5 h-5" />
           <span>العد التنازلي</span>
         </button>
 
         <button
-          onClick={() => setActiveTab('notes')}
-          className={`flex flex-col items-center gap-0.5 text-xs font-medium ${
-            activeTab === 'notes' ? 'text-rose-600 font-bold' : 'text-gray-500'
-          }`}
+          onClick={() => scrollToSection('notes')}
+          className="flex flex-col items-center gap-0.5 text-xs font-medium text-gray-500"
         >
           <Lock className="w-5 h-5" />
           <span>سرية</span>
         </button>
 
         <button
-          onClick={() => setActiveTab('daily')}
-          className={`flex flex-col items-center gap-0.5 text-xs font-medium ${
-            activeTab === 'daily' ? 'text-rose-600 font-bold' : 'text-gray-500'
-          }`}
+          onClick={() => scrollToSection('daily')}
+          className="flex flex-col items-center gap-0.5 text-xs font-medium text-gray-500"
         >
           <Gift className="w-5 h-5" />
           <span>صندوق الحب</span>

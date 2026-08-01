@@ -1,0 +1,6 @@
+{
+  "name": "Love Story & Memories - ذكريات حبنا",
+  "description": "موقع هدية رومانسي متكامل لعرض ذكريات الحب، العد التنازلي للمناسبات، الرسائل المخفية، صندوق المفاجآت اليومي، لوحة تحكم للتعديل، وموسيقى خلفية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
